@@ -22,5 +22,5 @@ func showMenu() {
 }
 
 func main() {
-
+	showMenu()
 }
