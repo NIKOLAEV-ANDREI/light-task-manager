@@ -48,6 +48,27 @@ func showTasks(tasks []Task) {
 	}
 }
 
+func markTaskDone(tasks *[]Task) {
+	if len(*tasks) == 0 {
+		fmt.Println("[Нет задач для отметки]")
+		return
+	}
+	showTasks(*tasks)
+	fmt.Println("[Введите номер задачи для отметки как выполненной:]")
+	var taskNumber int
+	fmt.Scan(&taskNumber)
+
+	index := taskNumber - 1
+
+	if index < 0 || index >= len(*tasks) {
+		fmt.Println("[Задача с таким номером не найдена!]\n")
+		return
+	}
+
+	(*tasks)[index].Done = true
+	fmt.Println("[Задача отмечена как выполненная!]\n")
+}
+
 func main() {
 	var choice string
 	tasks := []Task{}
@@ -66,7 +87,7 @@ func main() {
 		case "2":
 			showTasks(tasks)
 		case "3":
-			fmt.Println("[ФУНКЦИЯ-3]")
+			markTaskDone(&tasks)
 		case "4":
 			fmt.Println("[ФУНКЦИЯ-4]")
 		default:
