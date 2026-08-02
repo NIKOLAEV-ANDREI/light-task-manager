@@ -4,8 +4,24 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
+
+func readLine(scanner *bufio.Scanner) string {
+	scanner.Scan()
+	return strings.TrimSpace(scanner.Text())
+}
+
+func readTaskNumber(scanner *bufio.Scanner) (int, bool) {
+	taskNumber, err := strconv.Atoi(readLine(scanner))
+	if err != nil {
+		fmt.Println("[Введите номер задачи цифрами]")
+		return 0, false
+	}
+
+	return taskNumber, true
+}
 
 type Task struct {
 	Title       string
@@ -24,19 +40,14 @@ func showMenu() {
 
 }
 
-func addTask(tasks *[]Task) {
+func addTask(tasks *[]Task, scanner *bufio.Scanner) {
 	var newTask Task
-	reader := bufio.NewReader(os.Stdin)
-
-	reader.ReadString('\n')
 
 	fmt.Println("[Введите название задачи:]")
-	title, _ := reader.ReadString('\n')
-	newTask.Title = strings.TrimSpace(title)
+	newTask.Title = readLine(scanner)
 
 	fmt.Println("[Введите описание задачи:]")
-	description, _ := reader.ReadString('\n')
-	newTask.Description = strings.TrimSpace(description)
+	newTask.Description = readLine(scanner)
 
 	*tasks = append(*tasks, newTask)
 	fmt.Println("[Задача добавлена!]\n")
@@ -57,15 +68,17 @@ func showTasks(tasks []Task) {
 	}
 }
 
-func markTaskDone(tasks *[]Task) {
+func markTaskDone(tasks *[]Task, scanner *bufio.Scanner) {
 	if len(*tasks) == 0 {
 		fmt.Println("[Нет задач для отметки]")
 		return
 	}
 	showTasks(*tasks)
 	fmt.Println("\n[Введите номер задачи для отметки как выполненной:]")
-	var taskNumber int
-	fmt.Scan(&taskNumber)
+	taskNumber, ok := readTaskNumber(scanner)
+	if !ok {
+		return
+	}
 	fmt.Println()
 
 	index := taskNumber - 1
@@ -79,16 +92,17 @@ func markTaskDone(tasks *[]Task) {
 	fmt.Println("[Задача отмечена как выполненная!]\n")
 }
 
-func deleteTask(tasks *[]Task) {
-
+func deleteTask(tasks *[]Task, scanner *bufio.Scanner) {
 	if len(*tasks) == 0 {
 		fmt.Println("[Нет задач для удаления]")
 		return
 	}
 	showTasks(*tasks)
 	fmt.Println("\n[Введите номер задачи для удаления:]")
-	var taskNumber int
-	fmt.Scan(&taskNumber)
+	taskNumber, ok := readTaskNumber(scanner)
+	if !ok {
+		return
+	}
 	fmt.Println()
 	index := taskNumber - 1
 
@@ -98,13 +112,12 @@ func deleteTask(tasks *[]Task) {
 	}
 
 	fmt.Println("[ВЫ ТОЧНО ХОТИТЕ УДАЛИТЬ ДАННУЮ ЗАДАЧУ?] [Y/N]")
-	var confirmation string
-	fmt.Scan(&confirmation)
+	confirmation := strings.ToLower(readLine(scanner))
 	switch confirmation {
-	case "N", "n":
+	case "n":
 		fmt.Println("[Удаление задачи отменено!]\n")
 		return
-	case "Y", "y":
+	case "y":
 		*tasks = append((*tasks)[:index], (*tasks)[index+1:]...)
 		fmt.Println("[Задача удалена!]\n")
 	default:
@@ -115,13 +128,13 @@ func deleteTask(tasks *[]Task) {
 }
 
 func main() {
-	var choice string
 	tasks := []Task{}
+	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
 		showMenu()
 		fmt.Println("[Выберите действие:]")
-		fmt.Scan(&choice)
+		choice := readLine(scanner)
 		fmt.Println()
 
 		switch choice {
@@ -129,13 +142,13 @@ func main() {
 			fmt.Println("[Выход из менеджера задач]")
 			return
 		case "1":
-			addTask(&tasks)
+			addTask(&tasks, scanner)
 		case "2":
 			showTasks(tasks)
 		case "3":
-			markTaskDone(&tasks)
+			markTaskDone(&tasks, scanner)
 		case "4":
-			deleteTask(&tasks)
+			deleteTask(&tasks, scanner)
 		default:
 			fmt.Println("[Неизвестная команда. Пожалуйста, выберите действие из меню.]\n")
 		}
