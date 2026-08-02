@@ -21,8 +21,21 @@ func showMenu() {
 
 }
 
+func addTask(tasks *[]Task) {
+	var newTask Task
+
+	fmt.Println("Введите название задачи:")
+	fmt.Scan(&newTask.Title)
+	fmt.Println("Введите описание задачи:")
+	fmt.Scan(&newTask.Description)
+
+	*tasks = append(*tasks, newTask)
+	fmt.Println("Задача добавлена!\n")
+}
+
 func main() {
 	var choice string
+	tasks := []Task{}
 
 	for {
 		showMenu()
@@ -34,7 +47,7 @@ func main() {
 			fmt.Println("Выход из менеджера задач")
 			return
 		case "1":
-			fmt.Println("ФУНКЦИЯ-1")
+			addTask(&tasks)
 		case "2":
 			fmt.Println("ФУНКЦИЯ-2")
 		case "3":
