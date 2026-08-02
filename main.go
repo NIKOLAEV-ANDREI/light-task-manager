@@ -30,13 +30,14 @@ type Task struct {
 }
 
 func showMenu() {
-
-	fmt.Println("\n[Менеджер задач]")
+	fmt.Println()
+	fmt.Println("[Менеджер задач]")
 	fmt.Println("1. Добавить задачу")
 	fmt.Println("2. Просмотреть задачи")
 	fmt.Println("3. Отметить задачу как выполненную")
 	fmt.Println("4. Удалить задачу")
-	fmt.Println("0. Выйти\n")
+	fmt.Println("0. Выйти")
+	fmt.Println()
 
 }
 
@@ -50,12 +51,14 @@ func addTask(tasks *[]Task, scanner *bufio.Scanner) {
 	newTask.Description = readLine(scanner)
 
 	*tasks = append(*tasks, newTask)
-	fmt.Println("[Задача добавлена!]\n")
+	fmt.Println("[Задача добавлена!]")
+	fmt.Println()
 }
 
 func showTasks(tasks []Task) {
 	if len(tasks) == 0 {
-		fmt.Println("[Нет задач для отображения!]\n")
+		fmt.Println("[Нет задач для отображения!]")
+		fmt.Println()
 	} else {
 		fmt.Println("[Список задач]:")
 		for i, task := range tasks {
@@ -84,12 +87,14 @@ func markTaskDone(tasks *[]Task, scanner *bufio.Scanner) {
 	index := taskNumber - 1
 
 	if index < 0 || index >= len(*tasks) {
-		fmt.Println("[Задача с таким номером не найдена!]\n")
+		fmt.Println("[Задача с таким номером не найдена!]")
+		fmt.Println()
 		return
 	}
 
 	(*tasks)[index].Done = true
-	fmt.Println("[Задача отмечена как выполненная!]\n")
+	fmt.Println("[Задача отмечена как выполненная!]")
+	fmt.Println()
 }
 
 func deleteTask(tasks *[]Task, scanner *bufio.Scanner) {
@@ -107,7 +112,8 @@ func deleteTask(tasks *[]Task, scanner *bufio.Scanner) {
 	index := taskNumber - 1
 
 	if index < 0 || index >= len(*tasks) {
-		fmt.Println("[Задача с таким номером не найдена!]\n")
+		fmt.Println("[Задача с таким номером не найдена!]")
+		fmt.Println()
 		return
 	}
 
@@ -115,13 +121,16 @@ func deleteTask(tasks *[]Task, scanner *bufio.Scanner) {
 	confirmation := strings.ToLower(readLine(scanner))
 	switch confirmation {
 	case "n":
-		fmt.Println("[Удаление задачи отменено!]\n")
+		fmt.Println("[Удаление задачи отменено!]")
+		fmt.Println()
 		return
 	case "y":
 		*tasks = append((*tasks)[:index], (*tasks)[index+1:]...)
-		fmt.Println("[Задача удалена!]\n")
+		fmt.Println("[Задача удалена!]")
+		fmt.Println()
 	default:
-		fmt.Println("[Неверный ввод. Удаление задачи отменено!]\n")
+		fmt.Println("[Неверный ввод. Удаление задачи отменено!]")
+		fmt.Println()
 		return
 	}
 
@@ -150,7 +159,8 @@ func main() {
 		case "4":
 			deleteTask(&tasks, scanner)
 		default:
-			fmt.Println("[Неизвестная команда. Пожалуйста, выберите действие из меню.]\n")
+			fmt.Println("[Неизвестная команда. Пожалуйста, выберите действие из меню.]")
+			fmt.Println()
 		}
 	}
 }
