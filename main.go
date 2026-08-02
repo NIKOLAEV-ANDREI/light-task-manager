@@ -10,9 +10,17 @@ type Task struct {
 	Done        bool
 }
 
-func main() {
-	fmt.Println("Hello, World!")
+func showMenu() {
 
-	tasks := []Task{}
-	fmt.Println(tasks)
+	fmt.Println("Менеджер задач")
+	fmt.Println("1. Добавить задачу")
+	fmt.Println("2. Просмотреть задачи")
+	fmt.Println("3. Отметить задачу как выполненную")
+	fmt.Println("4. Удалить задачу")
+	fmt.Println("5. Выйти")
+
+}
+
+func main() {
+
 }
