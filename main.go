@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 )
 
 type Task struct {
@@ -23,11 +26,17 @@ func showMenu() {
 
 func addTask(tasks *[]Task) {
 	var newTask Task
+	reader := bufio.NewReader(os.Stdin)
+
+	reader.ReadString('\n')
 
 	fmt.Println("[Введите название задачи:]")
-	fmt.Scan(&newTask.Title)
+	title, _ := reader.ReadString('\n')
+	newTask.Title = strings.TrimSpace(title)
+
 	fmt.Println("[Введите описание задачи:]")
-	fmt.Scan(&newTask.Description)
+	description, _ := reader.ReadString('\n')
+	newTask.Description = strings.TrimSpace(description)
 
 	*tasks = append(*tasks, newTask)
 	fmt.Println("[Задача добавлена!]\n")
@@ -91,13 +100,14 @@ func deleteTask(tasks *[]Task) {
 	fmt.Println("[ВЫ ТОЧНО ХОТИТЕ УДАЛИТЬ ДАННУЮ ЗАДАЧУ?] [Y/N]")
 	var confirmation string
 	fmt.Scan(&confirmation)
-	if confirmation == "N" || confirmation == "n" {
+	switch confirmation {
+	case "N", "n":
 		fmt.Println("[Удаление задачи отменено!]\n")
 		return
-	} else if confirmation == "Y" || confirmation == "y" {
+	case "Y", "y":
 		*tasks = append((*tasks)[:index], (*tasks)[index+1:]...)
 		fmt.Println("[Задача удалена!]\n")
-	} else {
+	default:
 		fmt.Println("[Неверный ввод. Удаление задачи отменено!]\n")
 		return
 	}
